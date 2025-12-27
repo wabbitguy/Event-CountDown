@@ -3,7 +3,7 @@
 
  Application was built with the Arduino IDE 2.3.7
 
-This is a customizable bit of code for an ESP32 based Crowpanel 2.2. It uses the standard WIFI libraries and TFT_eSPI (there's a user setup file available that works with the 2.2 Crowpanel (User_Setup_Select.h). There are also two bitmaps (24 bit BMP format) that are shown leading up to the event date and then one for the actual event day. Time is obtained via the NTP servers ever couple of hours.
+This is a customizable bit of code for an ESP32 based Crowpanel 2.2. It uses the standard WIFI libraries and TFT_eSPI (there's a user setup file available that works with the 2.2 Crowpanel (User_Setup.h). There are also two bitmaps (24 bit BMP format) that are shown leading up to the event date and then one for the actual event day. Time is obtained via the NTP servers ever couple of hours.
 
 The custom section in the code is where you would define your own event like a birthday, anniversary, etc. The graphics go in the root of the SDcard and are defined in the code so it loads them:
 
