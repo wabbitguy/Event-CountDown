@@ -28,9 +28,23 @@ TFT_eSPI tft = TFT_eSPI();
 #define eventName "Christmas"       // this will be the AP name you set to setup wifi
 uint8_t targetMonth = 12;           // month from 1 to 12
 uint8_t targetDay = 25;             // Christmas day
-#define TREE_IMAGE "/Tree_2.bmp"    // graphics MUST be in 24bit format 192 x 128 (H x W)
+#define LEADING_IMAGE "/Tree_2.bmp"    // graphics MUST be in 24bit format 192 x 128 (H x W)
 #define DAY_IMAGE "/Christmas.bmp"  // main graphic 300 x 300 (H x W)
 uint16_t epochOffset = 28800;       // users time zone offset for the trigger date, in seconds
+
+// ---------------- TIME HELPERS ----------------
+
+//Edit These Lines According To Your Timezone and Daylight Saving Time
+//TimeZone Settings Details https://github.com/JChristensen/Timezone
+//US Pacific Time Zone
+TimeChangeRule usPDT = { "PDT", Second, dowSunday, Mar, 2, -420 };  // 7 hour offset
+TimeChangeRule usPST = { "PST", First, dowSunday, Nov, 2, -480 };   // 8 hour offset
+Timezone usPT(usPDT, usPST);
+//Pointer To The Time Change Rule, Use to Get The TZ Abbrev
+TimeChangeRule *tcr;
+time_t utc;
+bool didTargetCalc = false;  // we only need to calcuate the target once.
+time_t targetTimestamp;
 
 // ----------- CLOCK --------------
 bool clock24 = false;  // not implemented yet
@@ -186,19 +200,7 @@ int sd_init() {
   sd_init_flag = 1;
   return 0;
 }
-// ---------------- TIME HELPERS ----------------
 
-//Edit These Lines According To Your Timezone and Daylight Saving Time
-//TimeZone Settings Details https://github.com/JChristensen/Timezone
-//US Pacific Time Zone
-TimeChangeRule usPDT = { "PDT", Second, dowSunday, Mar, 2, -420 };  // 7 hour offset
-TimeChangeRule usPST = { "PST", First, dowSunday, Nov, 2, -480 };   // 8 hour offset
-Timezone usPT(usPDT, usPST);
-//Pointer To The Time Change Rule, Use to Get The TZ Abbrev
-TimeChangeRule *tcr;
-time_t utc;
-bool didTargetCalc = false;  // we only need to calcuate the target once.
-time_t targetTimestamp;
 // ---------------- UI HELPERS ----------------
 //
 void handleGRID() {
@@ -231,7 +233,7 @@ void handleLabels() {
   // Serial.println("File_Listing");
   // Serial.println("");
   // printDirectory(root, 0);
-  drawBmp(SD, TREE_IMAGE, 175, 262);  //display image1
+  drawBmp(SD, LEADING_IMAGE, 175, 262);  //display image1
 }
 //
 void handleCountDown(uint16_t theDays, uint8_t theHours, uint8_t theMinutes, uint8_t theSeconds) {
