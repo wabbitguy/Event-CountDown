@@ -14,7 +14,7 @@
 #include <TFT_eSPI.h>
 #include <math.h>
 
-#define VERSION "V2.2"
+#define VERSION "V2.3"
 
 // ---------------- DISPLAY ----------------
 #define SCREEN_W 320
@@ -25,12 +25,12 @@ TFT_eSPI tft = TFT_eSPI();
 
 // ---------------- WIFI + EVENT ----------------
 // HOSTNAME for OTA update
-#define eventName "Christmas"       // this will be the AP name you set to setup wifi
-uint8_t targetMonth = 12;           // month from 1 to 12
-uint8_t targetDay = 25;             // Christmas day
-#define LEADING_IMAGE "/Tree_2.bmp"    // graphics MUST be in 24bit format 192 x 128 (H x W)
-#define DAY_IMAGE "/Christmas.bmp"  // main graphic 300 x 300 (H x W)
-uint16_t epochOffset = 28800;       // users time zone offset for the trigger date, in seconds
+#define eventName "Christmas"        // this will be the AP name you set to setup wifi
+uint8_t targetMonth = 12;            // month from 1 to 12
+uint8_t targetDay = 25;              // Christmas day
+#define LEADING_IMAGE "/Tree_2.bmp"  // graphics MUST be in 24bit format 192 x 128 (H x W)
+#define DAY_IMAGE "/Christmas.bmp"   // main graphic 300 x 300 (H x W)
+uint16_t epochOffset = 28800;        // users time zone offset for the trigger date, in seconds
 
 // ---------------- TIME HELPERS ----------------
 
@@ -263,7 +263,7 @@ void handle_ClockDisplay() {
   myMinute = minute();
   mySecond = second();
   myYear = year();
-  myMonth = month();
+  myMonth = month();  // returns a value from 1 to 12
   //
   // now we draw the time and the date
   uint8_t xpos = (SCREEN_W / 2) - 1;
@@ -279,14 +279,12 @@ void handle_ClockDisplay() {
   tft.drawString(buffer, xpos, ypos, 7);  // Overwrite the text to clear it
   tft.setTextPadding(0);                  // Reset padding width to none
 
-  if (myDay != lastDay) {  // if the day changes, we update it, day of the week, and day
+  if (myDay != lastDay) {  // if the day changes, we update it with new month/date
     String monthStuff;
     tft.setTextDatum(BC_DATUM);
-    tft.setTextColor(TFT_BLACK, TFT_BLACK);                          // we're going to print with black to erase the last month, day
-    monthStuff = monthNames[lastMonth - 1] + " " + String(lastDay);  // this removes previous month/day
-    tft.drawString(monthStuff, 160, 136, 4);                         // display the day of the week
-    tft.setTextColor(TFT_WHITE, TFT_BLACK);                          // now we display the current month/day
-    monthStuff = monthNames[myMonth - 1] + " " + String(myDay);
+    tft.fillRect(32, 100, 256, 48, TFT_BLACK);
+    tft.setTextColor(TFT_WHITE, TFT_BLACK);  // now we display the current month/day
+    monthStuff = monthNames[myMonth - 1] + " " + String(myDay) + ", " + String(myYear);
     tft.drawString(monthStuff, 160, 136, 4);  // display the day of the week
   }
   //
@@ -348,7 +346,7 @@ void handle_ClockDisplay() {
     uint8_t secs = diff % 60;
     handleCountDown(days, hrs, mins, secs);  // go update the remaining time on the display
   }
-  //handleGRID();    // just a grid to find spacing if you need it
+  //handleGRID();  // just a grid to find spacing if you need it
 
   lastSecond = mySecond;  // save it for next time
   lastMinute = myMinute;  // save this for the next pass
@@ -479,6 +477,7 @@ void setup() {
   //Local intialization.
   WiFiManager wifiManager;
   //AP Configuration
+  wifiManager.setHostname("Christmas_Counter");  // sets the custom DNS name that appears in your router
   wifiManager.setAPCallback(configModeCallback);
   //Exit After Config Instead of connecting
   wifiManager.setBreakAfterConfig(true);
