@@ -37,9 +37,18 @@ There are two images used. One is leading up to the event day defined as "LEADIN
 
 Supplied is a custom TFT_eSPI file if you're using a Crowpanel 2.2. If you're not sure which version of the Crowpanel you have, it's clearly labeled on the back side:
 
-
+<img width="240" height="346" alt="CrowPanel_Version" src="https://github.com/wabbitguy/assets/blob/main/CrowPanel_Version.png" />
 
 When I originally wrote the firmware for count down, my intent was to use it strictly for Christmas. However I soon realized that with a few changes it could be used for any yearly event. Thus as the code stands at the moment, that's what you have. In the Arduino IDE the board selected is the "ESP32 Wrover Kit (all versions)" like this:
 
+Display Stand STL's
+
+Provided are the display STL parts to make a display stand for the project. Here's the front:
+
+<img width="240" height="346" alt="CrowPanel_Version" src="https://github.com/wabbitguy/assets/blob/main/Christmas%20Countdown.jpeg" />
+
+And the back is fully vented to avoid overheating:
+
+<img width="240" height="346" alt="CrowPanel_Version" src="https://github.com/wabbitguy/assets/blob/main/Christmas%20CountDown%20Back.jpeg" />
 
 Have fun and enjoy.
